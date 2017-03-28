@@ -1,0 +1,30 @@
+<form (submit)="salvar(estado)" novalidate #formCadastro="ngForm">
+  <div class="form-group">
+    <label for="nome">Nome</label>
+    <input type="text" [(ngModel)]="estado.nome" name="nome" class="form-control" />
+  </div>
+  <div class="form-group">
+    <label for="sigla">Sigla</label>
+    <input type="text" [(ngModel)]="estado.sigla" name="sigla" class="form-control" />
+  </div>
+  <button class="btn btn-success" type="submit">Salvar</button>
+</form>
+
+<br>
+
+<div class="card" *ngFor="let estado of estados">
+  <div class="card-block">
+    <div class="row">
+      <span class="col">
+        Estado: {{estado.nome}}
+      </span>
+      <span class="col">
+        Sigla: {{estado.sigla}}
+      </span>
+      <span class="col">
+        <button type="button" class="btn btn-warning pull-right" (click)="selecionaEstado(estado)">Alterar</button>
+        <button type="button" class="btn btn-danger pull-right" (click)="deletaEstado(estado)">Deletar</button>
+      </span>
+    </div>
+  </div>
+</div>

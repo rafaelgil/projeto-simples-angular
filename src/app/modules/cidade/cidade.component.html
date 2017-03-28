@@ -1,0 +1,39 @@
+<form (submit)="salvar(cidade)" novalidate #formCadastro="ngForm">
+  <div class="form-group">
+    <label for="nome">Nome</label>
+    <input type="text" [(ngModel)]="cidade.nome" name="nome" class="form-control" />
+  </div>
+  <div class="form-group">
+    <label for="estado">Estado</label>
+    <select name="estado" [(ngModel)]="cidade.estado" class="form-control">
+      <option *ngFor="let e of estados" [value]="e.codigo">{{e.nome}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="codigoIBGE">Código IBGE</label>
+    <input type="text" [(ngModel)]="cidade.codigoIBGE" name="codigoIBGE" class="form-control" />
+  </div>
+  <button class="btn btn-success" type="submit">Salvar</button>
+</form>
+
+<br>
+
+<div class="card" *ngFor="let cidade of cidades">
+  <div class="card-block">
+    <div class="row">
+      <span class="col">
+        Cidade: {{cidade.nome}}
+      </span>
+      <span class="col" *ngIf="cidade.objEstado">
+        Estado: {{cidade.objEstado.nome}}
+      </span>
+      <span class="col">
+        Código IBGE: {{cidade.codigoIBGE}}
+      </span>
+      <span class="col">
+        <button type="button" class="btn btn-warning pull-right" (click)="selecionaCidade(cidade)">Alterar</button>
+        <button type="button" class="btn btn-danger pull-right" (click)="deletaCidade(cidade)">Deletar</button>
+      </span>
+    </div>
+  </div>
+</div>
