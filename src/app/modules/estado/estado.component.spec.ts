@@ -1,25 +1,28 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EstadoComponent } from './estado.component';
+import 'rxjs/add/operator/toPromise';
 
-describe('EstadoComponent', () => {
-  let component: EstadoComponent;
-  let fixture: ComponentFixture<EstadoComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ EstadoComponent ]
-    })
-    .compileComponents();
-  }));
+fdescribe('estado.component.spec.ts', () => {
+  let estadoComponent: EstadoComponent;
+  let service;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EstadoComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    service = jasmine.createSpyObj('service', ['getEstados']);
+    
+    estadoComponent = new EstadoComponent(service);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('Componente foi criado', () => {
+    expect(estadoComponent).toBeTruthy();
   });
+
+  it('E agora ', () => {
+    service.getEstados.and.callFake(function(){
+      return [];
+    });
+    estadoComponent.reload();
+    //expect(service.getEstados).toHaveBeenCalled();
+  });
+
 });

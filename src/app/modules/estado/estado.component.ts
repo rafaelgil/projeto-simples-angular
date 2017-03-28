@@ -24,7 +24,7 @@ export class EstadoComponent implements OnInit {
     this.reload();
   }
 
-  private reload() {
+  public reload() {
     return this.service.getEstados()
       .then(estados => this.estados = estados);
   }
