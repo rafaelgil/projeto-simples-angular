@@ -1,28 +1,47 @@
+import { Observable } from 'rxjs/Rx';
+import { AppRoutingModule } from './../../app.routing';
+import { HttpModule } from '@angular/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { EstadoComponent } from './estado.component';
-import 'rxjs/add/operator/toPromise';
+import { APP_BASE_HREF } from '@angular/common';
+import { EstadoComponent } from "app/modules/estado/estado.component";
+import { EstadoModule } from "app/modules/estado/estado.module";
 
 fdescribe('estado.component.spec.ts', () => {
-  let estadoComponent: EstadoComponent;
-  let service;
+  let component: EstadoComponent;
+  let fixture: ComponentFixture<EstadoComponent>;
+  let service: any;
 
-  beforeEach(() => {
-    service = jasmine.createSpyObj('service', ['getEstados']);
-    
-    estadoComponent = new EstadoComponent(service);
-  });
+  beforeEach(async(() => {
 
-  it('Componente foi criado', () => {
-    expect(estadoComponent).toBeTruthy();
-  });
-
-  it('E agora ', () => {
+    service = jasmine.createSpyObj('service', [ 'getEstados']);
     service.getEstados.and.callFake(function(){
-      return [];
+      return Observable.of([]);
     });
-    estadoComponent.reload();
-    //expect(service.getEstados).toHaveBeenCalled();
+
+    TestBed.configureTestingModule({
+      imports: [EstadoModule, HttpModule, AppRoutingModule],
+      providers: [
+        { provide: APP_BASE_HREF, useValue: '/' },
+        {service}
+      ]
+    });
+    
+    TestBed.compileComponents().then(()=> {
+      fixture = TestBed.createComponent(EstadoComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    })
+  }));
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
+
+  it('E agora', () => {
+    component.reload();
+    expect(service.getEstados).toHaveBeenCalled();
+        
+  });
+
 
 });
