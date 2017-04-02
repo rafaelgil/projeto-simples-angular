@@ -20,10 +20,17 @@ export class CidadeComponent implements OnInit {
 
   private cidades: Array<Cidade>;
   private estados: Array<Estado>;
-
   private mensagem: String;
 
-  constructor(private service:CidadeService, private serviceestado:EstadoService) { }
+  public setEstados(estados:any){
+    this.estados = estados;
+  }
+
+  public setCidades(cidades:any){
+    this.cidades = cidades;
+  }
+
+  constructor(private service:CidadeService, private serviceEstado:EstadoService) { }
 
   ngOnInit() {
     //this.reload();
@@ -33,7 +40,7 @@ export class CidadeComponent implements OnInit {
 
   private reloadEstado() {
     console.log('reloadEstado');
-     return this.serviceestado.getEstados()
+     return this.serviceEstado.getEstados()
        .then(estados => this.estados = estados);
   }
 
@@ -41,7 +48,7 @@ export class CidadeComponent implements OnInit {
     return this.service.getCidades()
       .then(cidades => {
         this.cidades = cidades
-        this.serviceestado.getEstados()
+        this.serviceEstado.getEstados()
           .then(estados => {
             this.estados = estados; 
             for (let i = 0; i < this.cidades.length; i++) {

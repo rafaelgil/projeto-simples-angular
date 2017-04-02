@@ -1,13 +1,22 @@
-<form (submit)="salvar(estado)" novalidate #formCadastro="ngForm">
+<form  (submit)="salvar(estado); formCadastro.resetForm()" novalidate #formCadastro="ngForm">
+  
   <div class="form-group">
     <label for="nome">Nome</label>
-    <input type="text" [(ngModel)]="estado.nome" name="nome" class="form-control" />
+    <input type="text" [(ngModel)]="estado.nome" id="nome" name="nome" class="form-control" required/>    
   </div>
+  <div *ngIf="formCadastro.controls.nome?.errors && formCadastro.controls.nome?.touched" class="error">
+    O nome é obrigatório
+  </div>
+
   <div class="form-group">
     <label for="sigla">Sigla</label>
-    <input type="text" [(ngModel)]="estado.sigla" name="sigla" class="form-control" />
+    <input type="text" [(ngModel)]="estado.sigla" id="sigla" name="sigla" class="form-control" required />
   </div>
-  <button class="btn btn-success" type="submit">Salvar</button>
+  <div *ngIf="formCadastro.controls.sigla?.errors && formCadastro.controls.sigla?.touched" class="error">
+      O sigla é obrigatório
+  </div>
+
+  <button id="btnSalvar" class="btn btn-success" [disabled]="!formCadastro.valid" type="submit">Salvar</button>
 </form>
 
 <br>

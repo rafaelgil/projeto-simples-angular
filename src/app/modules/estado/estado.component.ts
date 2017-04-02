@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EstadoComponent implements OnInit {
 
-  private estado: Estado = {
+  public estado: Estado = {
     nome: "",
     sigla: ""
   }
@@ -27,6 +27,10 @@ export class EstadoComponent implements OnInit {
   public reload() {
     return this.service.getEstados()
       .then(estados => this.estados = estados);
+  }
+
+  public setEstados(est:any){
+    this.estados = est;
   }
 
   salvar(estado:any) {

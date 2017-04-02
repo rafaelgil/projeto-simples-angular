@@ -1,19 +1,32 @@
-<form (submit)="salvar(cidade)" novalidate #formCadastro="ngForm">
+<form (submit)="salvar(cidade); formCadastro.resetForm()" novalidate #formCadastro="ngForm">
+  
   <div class="form-group">
     <label for="nome">Nome</label>
-    <input type="text" [(ngModel)]="cidade.nome" name="nome" class="form-control" />
+    <input type="text" [(ngModel)]="cidade.nome" id="nome" name="nome" class="form-control" required/>
   </div>
+  <div *ngIf="formCadastro.controls.nome?.errors && formCadastro.controls.nome?.touched" class="error">
+    O nome é obrigatório
+  </div>
+
   <div class="form-group">
     <label for="estado">Estado</label>
-    <select name="estado" [(ngModel)]="cidade.estado" class="form-control">
+    <select id="estado" name="estado" [(ngModel)]="cidade.estado" class="form-control" required>
       <option *ngFor="let e of estados" [value]="e.codigo">{{e.nome}}</option>
     </select>
   </div>
+  <div *ngIf="formCadastro.controls.estado?.errors && formCadastro.controls.estado?.touched" class="error">
+    O estado é obrigatório
+  </div>
+
   <div class="form-group">
     <label for="codigoIBGE">Código IBGE</label>
-    <input type="text" [(ngModel)]="cidade.codigoIBGE" name="codigoIBGE" class="form-control" />
+    <input type="text" [(ngModel)]="cidade.codigoIBGE" id="codigoIBGE" name="codigoIBGE" class="form-control" required/>
   </div>
-  <button class="btn btn-success" type="submit">Salvar</button>
+  <div *ngIf="formCadastro.controls.codigoIBGE?.errors && formCadastro.controls.codigoIBGE?.touched" class="error">
+    O código IBGE é obrigatório
+  </div>
+
+  <button class="btn btn-success" [disabled]="formCadastro.invalid" id="btnSalvar" type="submit">Salvar</button>
 </form>
 
 <br>
