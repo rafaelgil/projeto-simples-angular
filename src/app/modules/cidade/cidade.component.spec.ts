@@ -9,7 +9,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { APP_BASE_HREF } from '@angular/common';
 import { CidadeComponent } from './cidade.component';
 
-describe('CidadeComponent', () => {
+describe('cidade.component.spec', () => {
   let component: CidadeComponent;
   let fixture: ComponentFixture<CidadeComponent>;
   let service: any;
@@ -20,39 +20,8 @@ describe('CidadeComponent', () => {
     serviceEstado = jasmine.createSpyObj('serviceEstado', [ 'getEstados']);
     service = jasmine.createSpyObj('service', [ 'getCidades', 'postCidade']);
 
-    serviceEstado.getEstados.and.callFake(() => Observable.of(GET_ESTADOS)
-      .toPromise()
-      .then(
-          parsedResponse => {
-              if (parsedResponse) {
-                return Object.keys(parsedResponse)
-                  .map(id => ({
-                    codigo: id,
-                    nome: parsedResponse[id].nome,
-                    sigla: parsedResponse[id].sigla
-                  }))
-                  .sort((a, b) => a.nome.localeCompare(b.nome));
-              }
-              return [];
-            }
-     ).then(estados => component.setEstados(estados)));
-
-    service.getCidades.and.callFake(() => Observable.of(GET_CIDADES)
-      .toPromise()
-      .then(
-          parsedResponse => {
-              if (parsedResponse) {
-                return Object.keys(parsedResponse)
-                  .map(id => ({
-                    codigo: id,
-                    nome: parsedResponse[id].nome,
-                    sigla: parsedResponse[id].sigla
-                  }))
-                  .sort((a, b) => a.nome.localeCompare(b.nome));
-              }
-              return [];
-            }
-      ).then(cidades => component.setCidades(cidades)));
+    serviceEstado.getEstados.and.callFake(() => Observable.of([{codigo: '1', nome: 'PARANA', sigla: 'PR'}]));
+    service.getCidades.and.callFake(() => Observable.of([{codigo: '1', nome: 'PARANA', estado: 'WFEFEFEFEFE', codigoIBGE: '8978'}]));
 
     TestBed.configureTestingModule({
       imports: [CidadeModule, HttpModule, AppRoutingModule],
@@ -90,50 +59,3 @@ describe('CidadeComponent', () => {
   });
 
 });
-
-const GET_ESTADOS = {
-	"-Kg5NrwGhhTnp8M1K7SL": {
-		"nome": "Parana",
-		"sigla": "PR"
-	},
-	"-Kg5lkXgEjFRxJ-qTSCF": {
-		"nome": "Rio de Janeiro",
-		"sigla": "RJ"
-	},
-	"-Kg5lnDeQ_H1LoZ-tqQg": {
-		"nome": "Santa Catarina",
-		"sigla": "SC"
-	},
-	"-KgaXcMe1E85S6SOefuy": {
-		"nome": "Sao Paulo",
-		"sigla": "SP"
-	}
-}
-
-const GET_CIDADES = {
-	"-Kg5sPfGHnMV5LTyR9Dm": {
-		"codigoIBGE": "53454543",
-		"estado": "-Kg5NrwGhhTnp8M1K7SL",
-		"nome": "Maringá",
-		"objEstado": {
-			"codigo": "-Kg5NrwGhhTnp8M1K7SL",
-			"nome": "Parana",
-			"sigla": "PR"
-		}
-	},
-	"-Kg60wbM2YyWj1L-kYJd": {
-		"codigoIBGE": "452523",
-		"estado": "-Kg5lnDeQ_H1LoZ-tqQg",
-		"nome": "Sarandi"
-	},
-	"-KgaZiWV-noVfBRLCgSW": {
-		"codigoIBGE": "125488",
-		"estado": "-KgaXcMe1E85S6SOefuy",
-		"nome": "Presidente Prudente"
-	},
-	"-KgaZxIoSlEHgI2HFdkp": {
-		"codigoIBGE": "58788",
-		"estado": "-KgaXcMe1E85S6SOefuy",
-		"nome": "Bauru"
-	}
-}

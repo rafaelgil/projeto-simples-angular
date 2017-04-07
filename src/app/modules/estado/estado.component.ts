@@ -26,7 +26,7 @@ export class EstadoComponent implements OnInit {
 
   public reload() {
     return this.service.getEstados()
-      .then(estados => this.estados = estados);
+      .subscribe(estados => this.estados = estados);
   }
 
   public setEstados(est:any){
@@ -36,29 +36,26 @@ export class EstadoComponent implements OnInit {
   salvar(estado:any) {
     if (estado.codigo) {
       this.service.pathEstado(estado)
-        .then(result => {
+        .subscribe(result => {
+          console.log('Passou ' + result);
           this.reload()
           this.mensagem = "Alterou!!!!";
           this.limpa();
-        }).catch(error => {
-          this.mensagem = "Problema ao alterar: " + error
         })
     }
     else {
       this.service.postEstado(estado)
-        .then(result => {
+        .subscribe(result => {
           this.reload()
           this.mensagem = "Salvou!!!!";
           this.limpa();
-        }).catch(error => {
-          this.mensagem = "Problema ao salvar: " + error
-        })
+        });
     }
   }
 
   deletaEstado(estado:any) {
     this.service.deletaEstado(estado.codigo)
-      .then(() => {
+      .subscribe(result => {
         this.reload()
         this.mensagem = "Deletado com Sucesso!!!"
       })
@@ -66,6 +63,7 @@ export class EstadoComponent implements OnInit {
 
   limpa() {
     this.estado = {
+      codigo: "",
       nome: "",
       sigla: ""
     }

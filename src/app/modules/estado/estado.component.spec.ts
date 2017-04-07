@@ -15,26 +15,15 @@ describe('estado.component.spec.ts', () => {
   let component: EstadoComponent;
   let fixture: ComponentFixture<EstadoComponent>;
   let service: any;
+  let serviceEstado: any;
 
   beforeEach(async(() => {
 
     service = jasmine.createSpyObj('service', [ 'getEstados', 'postEstado', 'pathEstado']);
-    service.getEstados.and.callFake(() => Observable.of(GET_ESTADOS)
-      .toPromise()
-      .then(
-          parsedResponse => {
-              if (parsedResponse) {
-                return Object.keys(parsedResponse)
-                  .map(id => ({
-                    codigo: id,
-                    nome: parsedResponse[id].nome,
-                    sigla: parsedResponse[id].sigla
-                  }))
-                  .sort((a, b) => a.nome.localeCompare(b.nome));
-              }
-              return [];
-            }
-      ).then(estados => component.setEstados(estados)));
+
+    
+    service.getEstados.and.callFake(() => Observable.of([{codigo: '1', nome: 'PARANA', sigla: 'PR'}]));
+    service.postEstado.and.callFake(() => Observable.of([{nome: 'São Paulo', sigla: 'SP'}]));
 
     TestBed.configureTestingModule({
       imports: [EstadoModule, HttpModule, AppRoutingModule],
@@ -78,12 +67,14 @@ describe('estado.component.spec.ts', () => {
     const estado: Estado = { nome: 'São Paulo', sigla: 'SP'};
     component.estado = estado;
     
-    fixture.detectChanges();
     const salvar: HTMLButtonElement = fixture.debugElement.query(By.css('#btnSalvar')).nativeElement;
 
     salvar.click();
 
+    fixture.detectChanges();
+
     fixture.whenStable().then(() => {
+      expect(service.postEstado).toHaveBeenCalled();
       expect(service.getEstados).toHaveBeenCalled();
       done();
     });
@@ -91,25 +82,6 @@ describe('estado.component.spec.ts', () => {
 
 
 });
-
-const GET_ESTADOS = {
-	"-Kg5NrwGhhTnp8M1K7SL": {
-		"nome": "Parana",
-		"sigla": "PR"
-	},
-	"-Kg5lkXgEjFRxJ-qTSCF": {
-		"nome": "Rio de Janeiro",
-		"sigla": "RJ"
-	},
-	"-Kg5lnDeQ_H1LoZ-tqQg": {
-		"nome": "Santa Catarina",
-		"sigla": "SC"
-	},
-	"-KgaXcMe1E85S6SOefuy": {
-		"nome": "Sao Paulo",
-		"sigla": "SP"
-	}
-}
 
 
 

@@ -41,15 +41,15 @@ export class CidadeComponent implements OnInit {
   private reloadEstado() {
     console.log('reloadEstado');
      return this.serviceEstado.getEstados()
-       .then(estados => this.estados = estados);
+       .subscribe(estados => this.estados = estados);
   }
 
   private reloadCidadeComEstado() {
     return this.service.getCidades()
-      .then(cidades => {
+      .subscribe(cidades => {
         this.cidades = cidades
         this.serviceEstado.getEstados()
-          .then(estados => {
+          .subscribe(estados => {
             this.estados = estados; 
             for (let i = 0; i < this.cidades.length; i++) {
               for (let j = 0; j < this.estados.length; j++) {
@@ -64,35 +64,30 @@ export class CidadeComponent implements OnInit {
 
   private reload() {
     return this.service.getCidades()
-      .then(cidades => this.cidades = cidades);
+      .subscribe(cidades => this.cidades = cidades);
   }
 
   salvar(cidade:any) {
     if (cidade.codigo) {
       this.service.pathCidade(cidade)
-        .then(result => {
+        .subscribe(result => {
           this.reloadCidadeComEstado()
           this.mensagem = "Alterou!!!!";
           this.limpa();
-        }).catch(error => {
-          this.mensagem = "Problema ao alterar: " + error
         })
-    }
-    else {
+    }else {
       this.service.postCidade(cidade)
-        .then(result => {
+        .subscribe(result => {
           this.reloadCidadeComEstado()
           this.mensagem = "Salvou!!!!";
           this.limpa();
-        }).catch(error => {
-          this.mensagem = "Problema ao salvar: " + error
         })
     }
   }
 
   deletaCidade(cidade:any) {
     this.service.deletaCidade(cidade.codigo)
-      .then(() => {
+      .subscribe(result => {
         this.reloadCidadeComEstado()
         this.mensagem = "Deletado com Sucesso!!!"
       })

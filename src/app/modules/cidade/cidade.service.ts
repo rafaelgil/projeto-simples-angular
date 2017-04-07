@@ -1,5 +1,7 @@
+import { Cidade } from './cidade';
+import { Observable } from 'rxjs/Rx';
 import { Injectable } from '@angular/core';
-import { Http } from "@angular/http";
+import { Http, Response } from "@angular/http";
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
@@ -9,28 +11,30 @@ export class CidadeService {
 
   constructor(private http:Http) { }
 
-  getCidades() {
+  getCidades():Observable<Cidade[]> {
     return this.http.get(`${this.baseUrl}/cidade.json`)
-      .toPromise()
-      .then(response => this.convert(response.json()));
+      .map((res: Response) => this.convert(res.json()))
+       .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  postCidade(cidade:any) {
+  postCidade(cidade:any):Observable<Cidade> {
     return this.http.post(`${this.baseUrl}/cidade.json`, cidade)
-      .toPromise()
-      .then(response => this.convert(response.json()));
+      .map((res: Response) => res.json())
+       .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  pathCidade(cidade:any) {
+  pathCidade(cidade:any):Observable<Cidade> {
     let codigo = cidade.codigo;
     delete cidade.codigo;
     return this.http.patch(`${this.baseUrl}/cidade/${codigo}.json`, cidade)
-      .toPromise();
+      .map((res: Response) => res.json())
+       .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  deletaCidade(codigoCidade:any) {
+  deletaCidade(codigoCidade:any):Observable<Cidade> {
     return this.http.delete(`${this.baseUrl}/cidade/${codigoCidade}.json`)
-      .toPromise();
+     .map((res: Response) => res.json())
+       .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
   private convert(parsedResponse:any) {

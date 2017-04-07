@@ -1,4 +1,6 @@
-import { Http } from '@angular/http';
+import { Estado } from './estado';
+import { Observable } from 'rxjs/Rx';
+import { Http, Response } from '@angular/http';
 import { Injectable } from '@angular/core';
 import 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
@@ -10,28 +12,30 @@ export class EstadoService {
 
   constructor(private http:Http) { }
 
-  getEstados() {
+  getEstados(): Observable<Estado[]> {
     return this.http.get(`${this.baseUrl}/estado.json`)
-      .toPromise()
-      .then(response => this.convert(response.json()));
+      .map((res: Response) => this.convert(res.json()))
+       .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  postEstado(estado:any) {
+  postEstado(estado:any):Observable<Estado> {
     return this.http.post(`${this.baseUrl}/estado.json`, estado)
-      .toPromise()
-      .then(response => this.convert(response.json()));
+      .map((res: Response) => res.json())
+       .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  pathEstado(estado:any) {
+  pathEstado(estado:any):Observable<Estado> {
     let codigo = estado.codigo;
     delete estado.codigo;
     return this.http.patch(`${this.baseUrl}/estado/${codigo}.json`, estado)
-      .toPromise();
+      .map((res: Response) => res.json())
+       .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
-  deletaEstado(codigoEstado:any) {
+  deletaEstado(codigoEstado:any):Observable<Estado> {
     return this.http.delete(`${this.baseUrl}/estado/${codigoEstado}.json`)
-      .toPromise();
+      .map((res: Response) => res.json())
+       .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
 
   private convert(parsedResponse:any) {
